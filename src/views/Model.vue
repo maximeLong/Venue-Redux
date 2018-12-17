@@ -36,7 +36,6 @@ export default {
       scene: {},
       controls: {},
       renderer: {},
-
       //three state
       wireframe: false,
       gammaOutput: true,
@@ -51,10 +50,8 @@ export default {
     }
   },
 
-  // -- Call Chain:
-  // 1) check if WebGL
-  // 2) start THREE scene
-  // 3) Load model
+  // 1) start THREE scene
+  // 2) Load model
   mounted: function() {
     window.addEventListener('resize', this.onWindowResize);
     this.startScene();
@@ -132,7 +129,6 @@ export default {
       this.scene = new THREE.Scene();
 
       //render loop -- and add to container
-      //TODO: have only one renderer in app, have to mutate renderer
       this.renderer = new THREE.WebGLRenderer({
         preserveDrawingBuffer: true,
         antialias: true,

@@ -69,6 +69,7 @@ export default {
     margin-bottom: 15px
   .submit-button
     +button(false, false, $action_color)
+    color: $text_color
   .content-box
     margin: 0 10px
     +screen(desktop)

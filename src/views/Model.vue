@@ -1,7 +1,7 @@
 <template>
   <div id="model">
 
-    <!-- model viewer and sprite container -->
+    <!-- THREE.JS anchor div -->
     <div id="model-viewer"></div>
 
     <!-- Project Links -->
@@ -50,11 +50,9 @@ export default {
     }
   },
 
-  // 1) start THREE scene
-  // 2) Load model
   mounted: function() {
     window.addEventListener('resize', this.onWindowResize);
-    this.startScene();
+    this.initThreeScene();
   },
   destroyed: function() {
     window.removeEventListener('resize', this.onWindowResize);
@@ -69,65 +67,17 @@ export default {
 
   methods: {
 
-    load: function() {
-      return new Promise((resolve, reject) => {
-
-        //get model from firebase
-        firebase.storage().ref('models/' + this.$store.state.user.uid + '/scene.glb').getDownloadURL()
-        .then((url)=> {
-
-          const loader = new THREE.GLTFLoader();
-          loader.load(url, (gltf) => {
-
-            const scene = gltf.scene || gltf.scenes[0];
-            this.scene.add(scene);
-
-            scene.updateMatrixWorld();
-            const box = new THREE.Box3().setFromObject(scene);
-            const size = box.getSize().length();
-            const center = box.getCenter();
-
-            this.controls.reset();
-            scene.position.x += (scene.position.x - center.x);
-            scene.position.y += (scene.position.y - center.y);
-            scene.position.z += (scene.position.z - center.z);
-            this.controls.maxDistance = size * 10;
-            this.camera.position.copy(center);
-            this.camera.position.x += size / 2.0;
-            this.camera.position.y += size / 5.0;
-            this.camera.position.z += size / 2.0;
-            this.camera.near = size / 100;
-            this.camera.far = size * 100;
-            this.camera.updateProjectionMatrix();
-            this.camera.lookAt(center);
-            this.controls.saveState();
-
-            //add lights and material
-            this.updateLights();
-            this.updateTextureEncoding(scene);
-            this.content = scene;
-
-            resolve();
-
-          }, undefined, reject);
-
-        }).catch(function(error) {
-          reject(error)
-        });
-
-      });
-    },
-
-    //three js scene and model loader
-    startScene: function() {
+    //ORDER OF OPERATIONS
+    // 1. initialize scene
+    // 2. start render loop
+    // 3. load model from firebase storage
+    initThreeScene: function() {
       var container = document.getElementById( 'model-viewer' );
       var containerHeight = getComputedStyle(container).height.slice(0, -2);
       var containerWidth = getComputedStyle(container).width.slice(0, -2);
-
       //create scene and camera
       this.camera = new THREE.PerspectiveCamera( 45, containerWidth / containerHeight, 1, 5000 );
       this.scene = new THREE.Scene();
-
       //render loop -- and add to container
       this.renderer = new THREE.WebGLRenderer({
         preserveDrawingBuffer: true,
@@ -138,21 +88,53 @@ export default {
       this.renderer.setSize( containerWidth, containerHeight );
       this.renderer.gammaOutput = this.gammaOutput;
       container.appendChild( this.renderer.domElement );
-
       // controls, camera
       this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
       this.controls.target.set( 0, 12, 0 );
       this.camera.position.set( 2, 18, 28 );
       this.controls.update();
-
       //run loop + watch for resize
       this.animate();
-      this.load()
-        .then(()=> {
-        })
-        .catch((error) => {
-          window.alert((error||{}).message || error);
+      this.loadModel();
+    },
+
+    loadModel: function() {
+      //get model from firebase
+      this.$store.dispatch('getModelUrl')
+      .then((url)=> {
+
+        const loader = new THREE.GLTFLoader();
+        loader.load(url, (gltf) => {
+          const scene = gltf.scene || gltf.scenes[0];
+          this.scene.add(scene);
+          //center model in middle of camera
+          scene.updateMatrixWorld();
+          const box = new THREE.Box3().setFromObject(scene);
+          const size = box.getSize().length();
+          const center = box.getCenter();
+          this.controls.reset();
+          scene.position.x += (scene.position.x - center.x);
+          scene.position.y += (scene.position.y - center.y);
+          scene.position.z += (scene.position.z - center.z);
+          this.controls.maxDistance = size * 10;
+          this.camera.position.copy(center);
+          this.camera.position.x += size / 2.0;
+          this.camera.position.y += size / 5.0;
+          this.camera.position.z += size / 2.0;
+          this.camera.near = size / 100;
+          this.camera.far = size * 100;
+          this.camera.updateProjectionMatrix();
+          this.camera.lookAt(center);
+          this.controls.saveState();
+          //add lights and material
+          this.updateLights();
+          this.updateTextureEncoding(scene);
+          this.content = scene;
         });
+      })
+      .catch((err)=> {
+        console.log(err)
+      })
     },
 
     updateTextureEncoding: function(content) {
@@ -190,13 +172,12 @@ export default {
       this.lights.push(light1, light2);
     },
 
-    //three render functions
+    //start render loop
     animate: function() {
       if (this.renderer === null) {
         cancelAnimationFrame( this.animate );
       } else {
         requestAnimationFrame( this.animate );
-
         this.controls.update();
         this.render();
       }
@@ -205,6 +186,7 @@ export default {
       this.renderer.render( this.scene, this.camera );
     },
 
+    //resizes container, and camera if screen changes
     onWindowResize: function(container) {
       var container = document.getElementById( 'model-viewer' );
       var containerHeight = getComputedStyle(container).height.slice(0, -2);
@@ -249,9 +231,5 @@ export default {
     .content-content
       overflow-y: scroll
       height: calc(100% - 50px)
-
-
-
-
 
 </style>

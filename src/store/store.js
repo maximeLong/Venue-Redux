@@ -33,7 +33,20 @@ export default new Vuex.Store({
           reject(error)
         });
       })
+    },
+
+    getModelUrl (store) {
+      return new Promise((resolve, reject) => {
+        firebase.storage().ref(store.state.user.uid + '/Models/scene.glb').getDownloadURL()
+        .then(function(url) {
+          resolve(url);
+        })
+        .catch(function(error) {
+          reject(error)
+        })
+      })
     }
+
   },
 
   mutations: {

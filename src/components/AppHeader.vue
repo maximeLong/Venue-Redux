@@ -2,8 +2,7 @@
   <div id="header-content">
 
     <div class="left-section">
-      <div class="our-logo" v-if="device !== 'mobile'">Venue</div>
-      <div class="logo" ></div>
+      <div class="our-logo">Venue</div>
     </div>
 
     <div class="right-section">

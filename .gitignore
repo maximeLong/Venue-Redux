@@ -2,6 +2,9 @@
 node_modules
 /dist
 
+# admin file
+adminKey.json
+
 # local env files
 .env.local
 .env.*.local

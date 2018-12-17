@@ -1,8 +1,8 @@
 <template>
   <div id="home">
 
-    <content-box :title="'Title of Project'">
-      <div class="title">please login to see model</div>
+    <content-box :title="'Venue Model Viewer'">
+      <div class="title">please login to see model info</div>
 
       <input :value="formEmail" @input="updateFormEmail" placeholder="email">
       <input :value="formPassword" @input="updateFormPassword" type="password" placeholder="password" @keyup.enter="trySignIn(formEmail, formPassword)">

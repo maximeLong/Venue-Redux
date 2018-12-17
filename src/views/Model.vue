@@ -6,7 +6,9 @@
 
     <!-- Project Links -->
     <content-box :title="'Additional Content'" v-if="device !== 'mobile'">
-      additional content goes here
+      <div v-for="link in additionalContent" class="content-link">
+        <a :href="link.url" target="_blank" rel="noopener noreferrer">{{link.name}}</a>
+      </div>
     </content-box>
 
   </div>
@@ -27,6 +29,7 @@ export default {
   },
   computed: {
     device: function() { return this.$store.state.device },
+    additionalContent: function() { return this.$store.state.additionalContent }
   },
 
   data: function(){
@@ -231,5 +234,10 @@ export default {
     .content-content
       overflow-y: scroll
       height: calc(100% - 50px)
+
+      .content-link
+        +systemType(small)
+        margin-bottom: 15px
+        color: $action_color
 
 </style>

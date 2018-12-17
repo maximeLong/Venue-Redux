@@ -1,0 +1,50 @@
+// type
+@import url(https://fonts.googleapis.com/css?family=Karla:400,700)
+@import url(https://fonts.googleapis.com/css?family=Quicksand:400,700)
+
+=systemType($size)
+  font-family: 'Quicksand', sans-serif
+  text-transform: uppercase
+  letter-spacing: 1px
+  font-weight: bold
+  color: $text_color
+  @if $size == biggest
+    font-size: 23px
+    line-height: 30px
+  @if $size == big
+    font-size: 19px
+    line-height: 25px
+  @if $size == average
+    font-size: 17px
+    line-height: 21px
+  @if $size == small
+    color: $text_color
+    font-size: 13px
+    line-height: 16px
+
+
+=userType($size)
+  font-family: 'Karla', sans-serif
+  color: $text_color
+  letter-spacing: 0px
+  @if $size == biggest
+    font-size: 28px
+    line-height: 33px
+  @if $size == big
+    font-size: 23px
+    line-height: 28px
+  @if $size == average
+    font-size: 18px
+    line-height: 22px
+  @if $size == small
+    color: $text_color
+    font-size: 15px
+    line-height: 18px
+
+
+h1
+  +systemType(biggest)
+  font-weight: bold
+h2
+  +systemType(average)
+  font-weight: bold

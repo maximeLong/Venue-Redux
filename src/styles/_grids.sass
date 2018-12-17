@@ -1,0 +1,30 @@
+// main app flow and sizing
+#app
+	+flexbox
+	+flex-direction(row)
+	max-height: 100vh
+	overflow: hidden
+
+	#main-panel
+		+flex(1)
+		#header-panel
+		#app-content
+			background-color: white
+			height: calc(100vh - 60px)
+			position: relative
+
+// --- @media query factory
+//
+$desktopWidth: 1280px
+$mobileWidth: 800px
+
+=screen($media)
+	@if $media == mobile
+		@media only screen and (max-width: $mobileWidth)
+			@content
+	@else if $media == tablet
+		@media only screen and (min-width: $mobileWidth + 1) and (max-width: $desktopWidth - 1)
+			@content
+	@else if $media == desktop
+		@media only screen and (min-width: $desktopWidth)
+			@content

@@ -57,8 +57,9 @@ export default new Vuex.Store({
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
         //send token to the server and return list of content
         var localUrl = "http://localhost:5000/venue-a2981/us-central1/venueApi";
+        var url = "https://us-central1-venue-a2981.cloudfunctions.net/venueApi";
 
-        fetch(localUrl + '/bucket/' + idToken)
+        fetch(url + '/bucket/' + idToken)
           .then(function(response) {
             return response.json();
           })

@@ -1,18 +1,26 @@
 <template>
   <div id="model">
 
-    <!-- THREE.JS anchor div -->
     <div id="model-viewer">
       <a-scene embedded vr-mode-ui="enabled: false">
-       <a-entity potree-loader="
-         src: https://cdn.rawgit.com/potree/potree/develop/pointclouds/lion_takanawa/;
-         pointBudget: 2000000;
-         pointSize: 1;
-         "
-         position="-1 -5 -2"
-         rotation="-85 0 0"
-       ></a-entity>
-       <a-entity camera look-controls orbit-controls="target: 0 0 -0.5; minDistance: 0.5; maxDistance: 180; initialPosition: 0 0 3"></a-entity>
+        <!-- potree component wrapper -->
+        <aframe-potree-loader></aframe-potree-loader>
+        <a-entity
+          id="camera"
+          camera="fov: 80; zoom: 1;"
+          mouse-cursor=""
+          position="0 2 50"
+          orbit-controls="
+            autoRotate: false;
+            invertZoom: true;
+            target: #cam-target;
+            enableDamping: true;
+            dampingFactor: 0.125;
+            rotateSpeed:0.25;
+            minDistance:3;
+            maxDistance:100;"
+        ></a-entity>
+        <a-entity id="cam-target" position="0 0 0"></a-entity>
       </a-scene>
     </div>
 
@@ -28,17 +36,19 @@
 
 <script>
 
+//have to require component libs here so aframe registers first
 require('aframe');
 require('aframe-potree-loader-component');
-require('aframe-orbit-controls');
+require('aframe-orbit-controls-component-2');
 
 import ContentBox from '../components/ContentBox'
-import _ from 'lodash'
+import AframePotreeLoader from '../components/AframePotreeLoader'
 
 export default {
   name: 'model',
   components: {
-    ContentBox
+    ContentBox,
+    AframePotreeLoader
   },
   computed: {
     device: function() { return this.$store.state.device },

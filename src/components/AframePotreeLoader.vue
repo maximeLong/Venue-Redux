@@ -60,9 +60,8 @@ export default {
       pointSizeTypes: ['adaptive', 'fixed', 'attenuated'],
       position: [-1, 2, -2],
       rotation: [-85, 0, 0],
-      src: 'http://5.9.65.151/mschuetz/potree/resources/pointclouds/scott_reed/DoverMillRuins/',
-      // src: 'http://5.9.65.151/mschuetz/potree/resources/pointclouds/weiss/chiller/',
-      // src: 'http://5.9.65.151/mschuetz/potree/resources/pointclouds/archpro/heidentor/',
+      src: 'https://cdn.rawgit.com/potree/potree/develop/pointclouds/lion_takanawa/'
+
     }
   }
 

@@ -58,7 +58,7 @@ export default {
       pointShape: 'square',
       pointSizeType: 'adaptive',
       pointSizeTypes: ['adaptive', 'fixed', 'attenuated'],
-      position: [-1, 2, -2],
+      position: [-1, -5, -2],
       rotation: [-85, 0, 0],
       src: 'https://cdn.rawgit.com/potree/potree/develop/pointclouds/lion_takanawa/'
 

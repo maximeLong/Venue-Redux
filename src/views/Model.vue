@@ -9,7 +9,7 @@
           id="camera"
           camera="fov: 80; zoom: 1;"
           mouse-cursor=""
-          position="0 2 50"
+          position="0 2 2"
           orbit-controls="
             autoRotate: false;
             invertZoom: true;
